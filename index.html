@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>Www.kouleen.cn</title>
+    <link href="http://lib.baomitu.com/layui/2.5.7/css/layui.css" rel="stylesheet">
+    <link rel="shortcut icon" href="http://download.kouleen.cn/file/download/QQ截图2020.PNG">
+</head>
+<body style="background-image:url(http://download.kouleen.cn/file/download/ganme.jpg);">
+
+<div>
+    <div style="margin-top: 15px;">
+        <div class=" layui-progress layui-progress-big" lay-filter="demo" lay-showPercent="true">
+            <div class="layui-progress-bar" lay-percent="0%"></div>
+        </div>
+        <form class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="name" placeholder="文件的名称" autocomplete="off">
+                    </div>
+                    <button class="layui-btn" type="button" id="searchBtn">查询</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传文件
+                    </button>
+                </div>
+            </div>
+        </form>
+        <table id="dataTable" lay-filter="dataTableFilter"></table>
+        <script type="text/html" id="rowBtns">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-xs layui-bg-blue" lay-event="query">
+                    <i class="layui-icon layui-icon-search"></i>地址
+                </button>
+            </div>
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-xs layui-btn-warm" lay-event="edit">
+                    <i class="layui-icon layui-icon-download-circle"></i>下载
+                </button>
+            </div>
+        </script>
+    </div>
+
+    <script src="http://lib.baomitu.com/layui/2.5.7/layui.js"></script>
+    <script>
+        layui.use(['upload', 'table', 'layer', 'jquery', 'element'], function () {
+            let table = layui.table;
+            let $ = layui.jquery;
+            let upload = layui.upload;
+            let layer = layui.layer;
+            let element = layui.element;
+            let uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                , url: '/file/upload' //上传接口
+                , accept: 'file'
+                //,exts: 'jar'
+                , done: function (res) {
+                    //上传完毕回调
+                    layer.msg(res.msg)
+                    element.progress('demo', '100%');
+                    $("#searchBtn").click();
+
+                }
+                , error: function () {
+                    //请求异常回调
+                    layer.msg("上传失败")
+                    $("#searchBtn").click();
+                }
+            });
+            window.setInterval(function () {
+                element.progress('demo', '0%');
+                $("#searchBtn").click();
+            }, 20000)
+
+            function edit(data) {
+                layer.msg("正在打开下载连接，稍等...")
+                $.get(`/file/query/${data.id}`, function (res) {
+                    if (res.code !== 4001004) {
+                        element.progress('demo', '100%');
+                        window.location.href = `/file/download/${data.id}/${encodeURIComponent(data.name)}`
+                        return;
+                    }
+                    element.progress('demo', '66%');
+                    layer.msg(res.msg)
+                })
+            }
+
+            function query(data) {
+                $.get(`/file/query/${data.id}`, function (res) {
+                    if (res.code !== 4001004) {
+                        layer.msg("正在打开页面，稍等...")
+                        layer.open({
+                            type: 1,
+                            title: "下载地址",
+                            area: ['600px', '100px'],
+                            offset: [ //为了演示，随机坐标
+                                Math.random() * ($(window).height() - 300)
+                                , Math.random() * ($(window).width() - 390)
+                            ],
+                            content: "http://download.kouleen.cn/file/download/" + data.name
+                        })
+                        element.progress('demo', '100%');
+                        return;
+                    }
+                    element.progress('demo', '66%');
+                    layer.msg(res.msg)
+                })
+            }
+
+            table.on("tool(dataTableFilter)", function (d) {
+                let event = d.event;
+                let data = d.data;
+                if (event == "edit") {
+                    edit(data);
+                } else if (event == "query") {
+                    query(data);
+                }
+            })
+
+            function getFileSize(fileSize) {
+                let i = 0
+                while (fileSize > 1024) {
+                    fileSize = fileSize / 1024;
+                    i++;
+                }
+                let unit = "";
+                switch (i) {
+                    case 0:
+                        unit = "B";
+                        break;
+                    case 1:
+                        unit = "KB";
+                        break;
+                    case 2:
+                        unit = "MB";
+                        break;
+                    case 3:
+                        unit = "GB";
+                        break;
+                    case 4:
+                        unit = "TB";
+                        break;
+                    case 5:
+                        unit = "PB";
+                        break;
+                    default:
+                        unit = "XB";
+                }
+                fileSize = fileSize.toFixed(2)
+                return fileSize + unit
+            }
+
+            let Opt = {
+                elem: '#dataTable',
+                url: '/file/queryFile',
+                skin: 'nob',
+                size: 'lg',
+                limit: "15",
+                cols: [
+                    [{field: 'id', width: 200, title: '文件编号', align: 'center'},
+                        {field: 'name', width: 550, title: '文件名称', align: 'center'},
+                        {
+                            field: 'size', width: 200, title: '文件大小', align: 'center', templet: function (d) {
+                                let size = d.size;
+                                return getFileSize(size)
+                            }
+                        },
+                        {field: 'click', width: 100, title: '文件热度', align: 'center'},
+                        {field: "createTime", width: 500, title: "创建时间", sort: true, align: 'center'},
+                        {title: "操作", width: 400, toolbar: "#rowBtns", align: 'center'}
+                    ]
+                ],
+                page: true
+                , parseData: function (rs) {
+                    return {
+                        "code": rs.code,
+                        "msg": rs.msg,
+                        "data": rs.data.records,
+                        "count": rs.data.total
+                    }
+                },
+                response: {
+                    statusCode: 200
+                }
+            }
+            let tabIns = table.render(Opt);
+
+            $("#searchBtn").click(function () {
+                let name = $("#name").val();
+                let createTime = $("#createTime").val();
+                tabIns.reload({
+                    where: {
+                        "name": name,
+                        "createTime": createTime,
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
