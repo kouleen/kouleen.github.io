@@ -94,7 +94,7 @@
 			<!--header模块-->
 			<header>
 				<!--头像-->
-				<span class="avatar"><img src="https://portrait.gitee.com/uploads/avatars/user/2764/8293549_kouleen_1607272715.jpeg!avatar200"
+				<span class="avatar"><img src="https://www.kouleen.cn/heheda/image/8293549_kouleen_1607272715.jpeg"
 						alt="582821086" /></span>
 				<!--内容-->
 				<a href="http://www.kouleen.cn">
@@ -139,28 +139,13 @@
 		<footer id="footer">
 			<ul class="copyright">
 				<!--IP信息模块-->
-				<li>您的IP：
-					<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
-					<script type="text/javascript">
-						document.write(returnCitySN["cip"])
-					</script>
-				</li>
-				<li>您的节点：
-					<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
-					<script type="text/javascript">
-						document.write(returnCitySN["cid"])
-					</script>
-				</li>
+				<li id="ipaddress">您的IP：</li>
+				<li id="ipnode">您的节点：</li>
 				<!--位置信息模块-->
-				<li>您的位置：
-					<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
-					<script type="text/javascript">
-						document.write(returnCitySN["cname"])
-					</script>
-				</li>
+				<li id="ipposition">您的位置：</li>
 			</ul>
 			<!--版权信息，请勿修改！-->
-			<a target="_blank" href="http://www.kouleen.cn/">Kouleen</a>&nbsp;&copy;&nbsp;版权所有
+			<a target="_blank" href="https://www.kouleen.cn/">Kouleen</a>&nbsp;&copy;&nbsp;版权所有
 		</footer>
 	</div>
 	<script>
@@ -189,13 +174,35 @@
 			});
 		});
 	</script>
+	<script>
+		let xhr = new XMLHttpRequest();
+		xhr.open('get', `https://www.kouleen.cn/v1/system/message/ip/message`);
+		// xhr.setRequestHeader('content-type', 'application/json');
+		xhr.send();
+		xhr.onload = function () {
+			let result = JSON.parse(xhr.response);
+			if (result.code == 200) {
+				console.log(result);
+				let ipaddress = document.getElementById("ipaddress");
+				ipaddress.innerText = "您的IP：" + result.data.ip;
+				let ipnode = document.getElementById("ipnode");
+				ipnode.innerText = "您的节点：" + result.data.data.owner;
+				let ipposition = document.getElementById("ipposition");
+				ipposition.innerText = "您的位置：" + result.data.data.continent + result.data.data.country + result.data.data.prov + result.data.data.city + result.data.data.district;
+			} else {
+				// var win_art = window.open("弹出新窗口的连接路径", "info", "width=270,height=300");
+				// window.location.href = "https://www.baidu.com";
+				alert(result.message)
+			}
+		}
+	</script>
 	<!--动态背景特效-->
 	<script type="text/javascript" color="0,0,255" opacity='0.7' zIndex="-2" count="200"
 		src="heheda/js/canvas-nest.min.js"></script>
 	<!-- 禁止右键和禁止选中文字 -->
 	<body onselectstart="return false" oncontextmenu=self.event.returnValue=false></body>
 	<!-- 背景音乐代码 -->
-	<audio autoplay="autopaly" loop="loop" src="https://webfs.yun.kugou.com/202106051447/9ed701695a4c5d70d780584d18be858d/G138/M01/02/05/apQEAFtk9biAX1Q4AEO9hxQ52f0274.mp3" type="audio/mpeg"></audio>
+<!-- 	<audio autoplay="autopaly" loop="loop" src="https://webfs.yun.kugou.com/202106051447/9ed701695a4c5d70d780584d18be858d/G138/M01/02/05/apQEAFtk9biAX1Q4AEO9hxQ52f0274.mp3" type="audio/mpeg"></audio> -->
 </body>
 
 </html>
