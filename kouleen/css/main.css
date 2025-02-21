@@ -185,10 +185,10 @@ html {
 body {
 	height: 100%;
 	background-color: #ffffff;
-	background-image: url(""), -moz-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("https://www.github.com");
-	background-image: url(""), -webkit-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("https://www.github.com");
-	background-image: url(""), -ms-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("https://www.github.com");
-	background-image: url(""), linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("https://www.github.com");
+	background-image: url(""), -moz-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("https://img1.baidu.com/it/u=2997031676,3387873238&fm=253&fmt=auto&app=138&f=JPEG?w=1412&h=800");
+	background-image: url(""), -webkit-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("http://img0.baidu.com/it/u=3468587136,1683257121&fm=253&app=138&f=JPEG?w=1423&h=800");
+	background-image: url(""), -ms-linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("http://img2.baidu.com/it/u=1629050263,3029258818&fm=253&app=138&f=JPEG?w=1422&h=800");
+	background-image: url(""), linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)), url("http://img2.baidu.com/it/u=1947476850,1131608004&fm=253&app=138&f=JPEG?w=1364&h=800");
 	background-repeat: repeat, no-repeat, no-repeat;
 	background-size: 100px 100px, cover, cover;
 	background-position: top left, center center, bottom centr;
