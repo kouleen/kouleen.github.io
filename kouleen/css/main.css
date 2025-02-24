@@ -975,11 +975,13 @@ body.is-loading #main {
 body.is-ie #wrapper {
 	height: 100%;
 }
+
 /*微信二维码*/
-.weixin{
-	position:relative;
+.weixin {
+	position: relative;
 }
-.weixin::after{
+
+.weixin::after {
 	content: url(../image/009.png);
 	position: absolute;
 	right: -178px;
@@ -996,7 +998,8 @@ body.is-ie #wrapper {
 	-o-transition: all .4s ease-in-out;
 	transition: all .4s ease-in-out;
 }
-.weixin:hover::after{
-	transform:scale(1);
+
+.weixin:hover::after {
+	transform: scale(1);
 	opacity: 1;
 }
