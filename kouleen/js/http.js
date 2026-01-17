@@ -7,7 +7,7 @@ function httpIPUtils(){
             let result = JSON.parse(xhr.response);
             if (result.code == 200) {
                 console.log(result);
-                xhr.open('get', `https://qifu-api.baidubce.com/ip/geo/v1/district?ip=` + result.data);
+                xhr.open('get', `https://api.ip.sb/geoip/` + result.data);
                 xhr.send();
                 xhr.onload = function () {
                     let result = JSON.parse(xhr.response);
@@ -15,9 +15,9 @@ function httpIPUtils(){
                     let ipaddress = document.getElementById("ipaddress");
                     ipaddress.innerText = "您的IP：" + (result.ip == undefined ? "未知" : result.ip);
                     let ipnode = document.getElementById("ipnode");
-                    ipnode.innerText = "您的节点：" + (result.data.owner == "" ? "未知" : result.data.owner);
+                    ipnode.innerText = "您的节点：" + (result.isp == "" ? "未知" : result.isp);
                     let ipposition = document.getElementById("ipposition");
-                    ipposition.innerText = "您的位置：" + (result.data.continent == "" ? "未知" : result.data.continent + result.data.country + result.data.prov + result.data.city + result.data.district);
+                    ipposition.innerText = "您的位置：" + (result.country == "" ? "未知" : result.country + " " + result.region + " " + result.city);
                 }
             }
         }
@@ -54,7 +54,7 @@ function client(){
                     let result = JSON.parse(xhr.response);
                     if (result.code == 200) {
                         console.log(result);
-                        xhr.open('get', `https://qifu-api.baidubce.com/ip/geo/v1/district?ip=` + result.data);
+                        xhr.open('get', `https://api.ip.sb/geoip/` + result.data);
                         xhr.send();
                         xhr.onload = function () {
                             let result = JSON.parse(xhr.response);
@@ -62,9 +62,9 @@ function client(){
                             let ipaddress = document.getElementById("ipaddress");
                             ipaddress.innerText = "您的IP：" + (result.ip == undefined ? "未知" : result.ip);
                             let ipnode = document.getElementById("ipnode");
-                            ipnode.innerText = "您的节点：" + (result.data.owner == "" ? "未知" : result.data.owner);
+                            ipnode.innerText = "您的节点：" + (result.isp == "" ? "未知" : result.isp);
                             let ipposition = document.getElementById("ipposition");
-                            ipposition.innerText = "您的位置：" + (result.data.continent == "" ? "未知" : result.data.continent + result.data.country + result.data.prov + result.data.city + result.data.district);
+                            ipposition.innerText = "您的位置：" + (result.country == "" ? "未知" : result.country + " " + result.region + " " + result.city);
                         }
                     }
                 }
